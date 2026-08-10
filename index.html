@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <title>CODM Account Generator | sunnelxy</title>
+    <style>
+        :root{--bg:#0a0a0a;--card-bg:#1a1a1a;--border:#333;--accent:#ff4500;--text:#e0e0e0;--text-secondary:#888;--green:#00ff88;--red:#ff4444;--blue:#4488ff;--purple:#bb88ff;--yellow:#ffaa00;--pink:#ff66aa;--cyan:#00ddcc;--glow:0 0 25px rgba(255,69,0,0.6);--glow-green:0 0 20px rgba(0,255,136,0.5);--glow-red:0 0 20px rgba(255,68,68,0.5);--glow-blue:0 0 20px rgba(68,136,255,0.5);--glow-purple:0 0 20px rgba(187,136,255,0.5);--glow-yellow:0 0 20px rgba(255,170,0,0.5);--glow-pink:0 0 20px rgba(255,102,170,0.5);--glow-cyan:0 0 20px rgba(0,221,204,0.5)}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:var(--bg);font-family:'Courier New',monospace;color:var(--text);min-height:100vh;overflow-x:hidden;position:relative}
+        .protected{user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none}
+        #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        .main-container{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:20px}
+        .header{text-align:center;padding:30px 20px 15px;animation:slideDown 0.8s ease-out}
+        @keyframes slideDown{from{transform:translateY(-100px);opacity:0}to{transform:translateY(0);opacity:1}}
+        .header h1{font-size:2.2em;font-weight:900;background:linear-gradient(135deg,#ff4500,#ff8c00,#ff4500);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:gradientShift 3s ease infinite;letter-spacing:2px}
+        @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .header .subtitle{color:var(--accent);font-size:0.9em;letter-spacing:4px;margin-top:5px;animation:flicker 2.5s infinite}
+        @keyframes flicker{0%,100%{opacity:1}50%{opacity:0.6}}
+        .header .powered-by-header{color:#555;font-size:0.7em;margin-top:8px;letter-spacing:2px}
+        .user-bar{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+        .user-bar .user-info{color:var(--cyan);font-size:0.7em;letter-spacing:1px}
+        .btn-logout-small{background:#1a0000;color:var(--red);border:1px solid var(--red);padding:6px 14px;border-radius:15px;cursor:pointer;font-family:'Courier New',monospace;font-size:0.65em;letter-spacing:1px;transition:all 0.3s;display:none}
+        .btn-logout-small:hover{background:#2a0000;box-shadow:var(--glow-red)}
+        .locked-overlay{display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:150;justify-content:center;align-items:center;flex-direction:column}
+        .locked-overlay.hidden{display:none}
+        .locked-box{background:#111;border:2px solid var(--accent);border-radius:16px;padding:35px 30px;text-align:center;max-width:450px;width:90%;box-shadow:0 0 60px rgba(255,69,0,0.5);animation:modalPop 0.4s ease}
+        @keyframes modalPop{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+        .locked-box h2{color:var(--accent);font-size:1.4em;letter-spacing:3px;margin-bottom:8px}
+        .locked-box .lock-icon{font-size:3em;display:block;margin-bottom:10px;animation:bounce 1s infinite}
+        @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        .locked-box p{color:#888;font-size:0.7em;letter-spacing:1px;margin-bottom:20px;line-height:1.6}
+        .locked-box input{width:100%;padding:10px;background:#1a1a1a;border:1px solid #444;color:#fff;font-family:'Courier New',monospace;font-size:0.8em;border-radius:5px;margin-bottom:8px;transition:all 0.3s}
+        .locked-box input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 15px rgba(255,69,0,0.3)}
+        .locked-box button{width:100%;padding:10px;background:linear-gradient(135deg,#ff4500,#ff6a00);color:#000;border:none;border-radius:6px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.8em;letter-spacing:2px;margin-top:5px;transition:all 0.3s}
+        .locked-box button:hover{box-shadow:var(--glow);transform:scale(1.02)}
+        .locked-box .switch-text{color:#666;font-size:0.6em;margin-top:10px;letter-spacing:1px}
+        .locked-box .switch-text span{color:var(--accent);cursor:pointer}
+        .locked-error{color:var(--red);font-size:0.6em;margin-bottom:5px;display:none}
+        .announcement-bar{background:linear-gradient(135deg,#1a0030,#2a0050,#1a0030);background-size:200% 200%;animation:announceGlow 2s ease-in-out infinite;border:1px solid var(--pink);border-radius:10px;padding:14px 20px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;box-shadow:0 0 25px rgba(255,102,170,0.4)}
+        @keyframes announceGlow{0%,100%{box-shadow:0 0 25px rgba(255,102,170,0.4)}50%{box-shadow:0 0 50px rgba(255,102,170,0.8)}}
+        .announcement-bar .announce-icon{font-size:1.2em;animation:bounce 0.8s infinite}
+        .announcement-bar .announce-title{color:var(--pink);font-weight:bold;font-size:0.8em;letter-spacing:3px;text-transform:uppercase;display:block;margin-bottom:4px}
+        .announcement-bar .announce-text{color:#ddccff;font-size:0.75em;letter-spacing:1px;line-height:1.5}
+        .announcement-bar .announce-close{position:absolute;top:8px;right:14px;cursor:pointer;color:#885588;font-size:1.2em;transition:color 0.3s;background:none;border:none;font-family:'Courier New',monospace}
+        .announcement-bar .announce-close:hover{color:#ff66aa}
+        .announcement-bar.hidden{display:none}
+        .announce-flash{animation:flashHighlight 0.5s ease-in-out 4}
+        @keyframes flashHighlight{0%,100%{border-color:var(--pink)}50%{border-color:#fff;box-shadow:0 0 60px rgba(255,255,255,0.7)}}
+        .tab-nav{display:flex;gap:4px;margin-bottom:0;flex-wrap:wrap;justify-content:center}
+        .tab-btn{padding:10px 20px;background:#111;color:#666;border:1px solid #333;border-bottom:none;border-radius:8px 8px 0 0;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.75em;letter-spacing:1px;transition:all 0.3s}
+        .tab-btn:hover{color:#fff;background:#1a1a1a}
+        .tab-btn.active{color:var(--accent);background:#1a1a1a;border-color:var(--accent);box-shadow:0 -4px 15px rgba(255,69,0,0.4)}
+        .tab-btn.saved-tab{color:var(--cyan)}
+        .tab-btn.saved-tab.active{color:var(--cyan);border-color:var(--cyan);box-shadow:0 -4px 15px rgba(0,221,204,0.4);background:#0a1a1a}
+        .tab-content{display:none;background:#111;border:1px solid #333;border-radius:0 0 12px 12px;padding:20px}
+        .tab-content.active{display:block}
+        .tab-content.saved-content{border-color:#1a3a3a}
+        .saved-stats{display:flex;gap:15px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+        .saved-stat-card{background:#0a1a1a;border:1px solid #1a3a3a;border-radius:10px;padding:15px 20px;text-align:center;min-width:100px;transition:all 0.3s}
+        .saved-stat-card:hover{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,221,204,0.3)}
+        .saved-stat-card .stat-num{color:var(--cyan);font-size:1.5em;font-weight:bold}
+        .saved-stat-card .stat-label{color:#558888;font-size:0.65em;letter-spacing:2px;margin-top:4px}
+        .saved-accounts-list{max-height:400px;overflow-y:auto}
+        .saved-account-item{background:#0d0d0d;border:1px solid #1a2a2a;border-radius:8px;padding:12px 15px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;transition:all 0.3s}
+        .saved-account-item:hover{border-color:var(--cyan);box-shadow:0 0 20px rgba(0,221,204,0.2);transform:translateX(3px)}
+        .saved-account-info{flex:1;min-width:200px}
+        .saved-account-info .saved-acc{color:#fff;font-weight:bold;font-size:0.8em}
+        .saved-account-info .saved-meta{color:#555;font-size:0.65em;margin-top:3px}
+        .saved-account-actions{display:flex;gap:6px}
+        .btn-saved{padding:7px 14px;border:none;border-radius:20px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.65em;letter-spacing:1px;transition:all 0.3s;white-space:nowrap}
+        .btn-saved-copy{background:#0a2a2a;color:var(--cyan);border:1px solid var(--cyan)}.btn-saved-copy:hover{background:#0a3a3a;box-shadow:var(--glow-cyan)}
+        .btn-saved-copy-user{background:#0a1a2a;color:var(--blue);border:1px solid var(--blue)}.btn-saved-copy-user:hover{background:#0a2a3a;box-shadow:var(--glow-blue)}
+        .btn-saved-copy-pass{background:#1a1a00;color:var(--yellow);border:1px solid var(--yellow)}.btn-saved-copy-pass:hover{background:#2a2a00;box-shadow:var(--glow-yellow)}
+        .btn-saved-delete{background:#1a0000;color:var(--red);border:1px solid var(--red)}.btn-saved-delete:hover{background:#2a0000;box-shadow:var(--glow-red)}
+        .btn-export-all{padding:10px 20px;background:#0a2a2a;color:var(--cyan);border:1px solid var(--cyan);border-radius:25px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.7em;letter-spacing:2px;transition:all 0.3s;display:block;margin:15px auto 0}
+        .btn-export-all:hover{background:#0a3a3a;box-shadow:var(--glow-cyan)}
+        .no-saved{text-align:center;color:#444;padding:30px;font-size:0.8em;letter-spacing:2px}
+        .gear-icon{position:fixed;top:20px;right:20px;z-index:100;font-size:1.8em;cursor:pointer;animation:spinSlow 8s linear infinite,gearGlow 2s ease-in-out infinite;color:#555;transition:color 0.3s;background:rgba(0,0,0,0.7);border-radius:50%;width:45px;height:45px;display:flex;align-items:center;justify-content:center;border:1px solid #333}
+        @keyframes gearGlow{0%,100%{box-shadow:0 0 5px rgba(255,69,0,0.2)}50%{box-shadow:0 0 25px rgba(255,69,0,0.6)}}
+        .gear-icon:hover{color:var(--accent);box-shadow:var(--glow)}
+        @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        .admin-panel{display:none;background:#0d0d0d;border:2px solid var(--red);border-radius:12px;padding:20px;margin-bottom:20px;animation:slideDown 0.4s ease-out;box-shadow:0 0 40px rgba(255,68,68,0.4)}
+        .admin-panel.active{display:block}
+        .admin-panel h3{color:var(--red);text-align:center;margin-bottom:15px;font-size:1.2em;letter-spacing:2px}
+        .admin-panel label{display:block;color:#aaa;font-size:0.75em;margin-top:8px;letter-spacing:1px}
+        .admin-panel textarea{width:100%;padding:12px;background:#1a1a1a;border:1px solid #444;color:#fff;font-family:'Courier New',monospace;font-size:0.8em;border-radius:5px;margin-bottom:5px;transition:border 0.3s;resize:vertical;min-height:150px}
+        .admin-panel textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 15px rgba(255,69,0,0.4)}
+        .admin-btn-row{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
+        .btn-admin{padding:10px 18px;border:none;border-radius:6px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;letter-spacing:1px;font-size:0.8em;transition:all 0.3s}
+        .btn-admin-add{background:var(--accent);color:#000}.btn-admin-add:hover{box-shadow:var(--glow);transform:scale(1.03)}
+        .btn-admin-rebrand{background:#4a0030;color:#ff66aa;border:1px solid #ff66aa}.btn-admin-rebrand:hover{background:#5a0040;box-shadow:0 0 25px rgba(255,102,170,0.6)}
+        .btn-admin-view{background:#333;color:#fff}.btn-admin-view:hover{background:#555}
+        .btn-admin-clear{background:#2a0000;color:var(--red);border:1px solid var(--red)}.btn-admin-clear:hover{background:#3a0000}
+        .btn-admin-logout{background:#111;color:#888;border:1px solid #444}.btn-admin-logout:hover{color:#fff}
+        .admin-hint{color:#555;font-size:0.65em;margin-top:4px;letter-spacing:1px}
+        .admin-announce-section{background:#0a0015;border:1px solid #441155;border-radius:8px;padding:15px;margin-top:15px}
+        .admin-announce-section label{color:#cc88dd;font-size:0.75em;letter-spacing:1px;display:block;margin-bottom:5px}
+        .admin-announce-section input,.admin-announce-section textarea{width:100%;padding:8px 12px;background:#1a1a1a;border:1px solid #444;color:#fff;font-family:'Courier New',monospace;font-size:0.8em;border-radius:5px;margin-bottom:8px;transition:border 0.3s}
+        .admin-announce-section input:focus,.admin-announce-section textarea:focus{border-color:var(--pink);outline:none;box-shadow:0 0 15px rgba(255,102,170,0.4)}
+        .admin-announce-section textarea{resize:vertical;min-height:60px}
+        .btn-announce-save{padding:10px 18px;background:#4a0030;color:var(--pink);border:1px solid var(--pink);border-radius:6px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.8em;letter-spacing:1px;transition:all 0.3s}
+        .btn-announce-save:hover{background:#5a0040;box-shadow:var(--glow-pink);transform:scale(1.03)}
+        .btn-announce-clear{padding:10px 18px;background:#1a0010;color:#885588;border:1px solid #442244;border-radius:6px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.8em;letter-spacing:1px;transition:all 0.3s;margin-left:8px}
+        .btn-announce-clear:hover{background:#2a0020;color:#ff66aa}
+        .admin-accounts-table{width:100%;border-collapse:collapse;margin-top:15px;font-size:0.7em;max-height:300px;overflow-y:auto;display:block}
+        .admin-accounts-table th,.admin-accounts-table td{border:1px solid #333;padding:6px 8px;text-align:left;white-space:nowrap}
+        .admin-accounts-table th{background:#1a1a1a;color:var(--accent);position:sticky;top:0}
+        .admin-accounts-table td{color:#ccc}
+        .btn-delete-row{background:var(--red);color:#fff;border:none;padding:4px 10px;cursor:pointer;border-radius:3px;font-size:0.75em;font-family:'Courier New',monospace}.btn-delete-row:hover{background:#ff0000}
+        .generate-section{text-align:center;margin:20px 0}
+        .btn-generate{padding:16px 40px;font-size:1.1em;font-weight:bold;font-family:'Courier New',monospace;letter-spacing:2px;background:linear-gradient(135deg,#ff4500,#ff6a00,#ff0000);background-size:300% 300%;color:#000;border:none;border-radius:50px;cursor:pointer;transition:all 0.3s;box-shadow:0 0 35px rgba(255,69,0,0.5);position:relative;overflow:hidden;animation:btnPulse 2s ease-in-out infinite}
+        @keyframes btnPulse{0%,100%{box-shadow:0 0 35px rgba(255,69,0,0.5)}50%{box-shadow:0 0 60px rgba(255,69,0,0.9)}}
+        .btn-generate:hover{box-shadow:0 0 70px rgba(255,69,0,1);transform:scale(1.06)}.btn-generate:active{transform:scale(0.95)}
+        .btn-generate::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,0.2),transparent);animation:shimmer 1.5s infinite}
+        @keyframes shimmer{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+        .account-counter{color:var(--text-secondary);font-size:0.8em;margin-top:10px;letter-spacing:2px}.account-counter span{color:var(--accent);font-weight:bold}
+        .card-container{perspective:1200px;margin:20px auto;max-width:700px}
+        .card-flipper{transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);transform-style:preserve-3d;position:relative}
+        .card-flipper.flipping{transform:rotateY(360deg)}
+        .account-card{background:var(--card-bg);border:2px solid #2a2a2a;border-radius:16px;padding:25px;box-shadow:0 0 35px rgba(255,69,0,0.3),inset 0 0 60px rgba(255,69,0,0.04);position:relative;overflow:hidden;animation:cardGlow 2.5s ease-in-out infinite}
+        @keyframes cardGlow{0%,100%{box-shadow:0 0 35px rgba(255,69,0,0.3),inset 0 0 60px rgba(255,69,0,0.04)}50%{box-shadow:0 0 55px rgba(255,69,0,0.6),inset 0 0 80px rgba(255,69,0,0.08)}}
+        .card-section{margin-bottom:18px;border-bottom:1px solid #222;padding-bottom:12px}.card-section:last-of-type{border-bottom:none}
+        .card-section-title{color:var(--accent);font-weight:bold;font-size:0.8em;letter-spacing:3px;margin-bottom:10px;text-transform:uppercase}
+        .card-row{display:flex;justify-content:space-between;padding:4px 0;font-size:0.78em;flex-wrap:wrap}
+        .card-label{color:#666;min-width:140px}.card-value{color:#ddd;word-break:break-all;text-align:right;flex:1}
+        .card-value.highlight{color:#fff;font-weight:bold;font-size:0.9em;background:#1a1a1a;padding:4px 10px;border-radius:4px;letter-spacing:1px}
+        .status-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-weight:bold;font-size:0.75em;letter-spacing:2px}
+        .status-not-clean{background:rgba(255,68,68,0.2);color:var(--red);border:1px solid var(--red);animation:pulseRed 1.2s infinite}
+        @keyframes pulseRed{0%,100%{box-shadow:0 0 8px rgba(255,68,68,0.4)}50%{box-shadow:0 0 25px rgba(255,68,68,0.9)}}
+        .powered-by{text-align:center;color:#444;font-size:0.7em;margin-top:15px;letter-spacing:2px;padding-top:10px;border-top:1px solid #1a1a1a}
+        .action-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+        .btn-action{padding:11px 18px;border:none;border-radius:30px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold;font-size:0.75em;letter-spacing:1px;transition:all 0.3s;white-space:nowrap}
+        .btn-copy{background:#1a3a2a;color:var(--green);border:1px solid var(--green)}.btn-copy:hover{background:#1a4a2a;box-shadow:var(--glow-green);transform:scale(1.05)}
+        .btn-auto-copy-user{background:#1a2a3a;color:var(--blue);border:1px solid var(--blue)}.btn-auto-copy-user:hover{background:#1a3a5a;box-shadow:var(--glow-blue);transform:scale(1.05)}
+        .btn-auto-copy-email{background:#2a1a3a;color:var(--purple);border:1px solid var(--purple)}.btn-auto-copy-email:hover{background:#3a2a4a;box-shadow:var(--glow-purple);transform:scale(1.05)}
+        .btn-auto-copy-pass{background:#2a2000;color:var(--yellow);border:1px solid var(--yellow)}.btn-auto-copy-pass:hover{background:#3a2a00;box-shadow:var(--glow-yellow);transform:scale(1.05)}
+        .btn-working{background:#0a2a0a;color:var(--green);border:1px solid var(--green)}.btn-working:hover{background:#0a3a0a;box-shadow:var(--glow-green);transform:scale(1.05)}
+        .btn-not-working{background:#2a0a0a;color:var(--red);border:1px solid var(--red)}.btn-not-working:hover{background:#3a0a0a;box-shadow:var(--glow-red);transform:scale(1.05)}
+        .verify-section{text-align:center;margin-top:20px;padding:15px;background:#0f0f0f;border-radius:10px;border:1px solid #222}
+        .verify-section p{color:#777;font-size:0.75em;letter-spacing:1px;margin-bottom:10px}
+        .verify-input-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .verify-input{padding:10px 15px;background:#1a1a1a;border:1px solid #333;color:#fff;font-family:'Courier New',monospace;border-radius:20px;font-size:0.75em;min-width:250px;transition:border 0.3s}
+        .verify-input:focus{border-color:var(--accent);outline:none}
+        .btn-submit-question{padding:10px 18px;background:#222;color:#aaa;border:1px solid #444;border-radius:20px;cursor:pointer;font-family:'Courier New',monospace;font-size:0.75em;letter-spacing:1px;transition:all 0.3s}
+        .btn-submit-question:hover{background:#333;color:#fff;border-color:var(--accent)}
+        .log-panel{margin-top:25px;background:#0d0d0d;border:1px solid #222;border-radius:10px;padding:15px;max-height:250px;overflow-y:auto}
+        .log-panel h3{color:var(--accent);font-size:0.8em;letter-spacing:3px;margin-bottom:10px;text-align:center}
+        .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+        .toast{padding:12px 24px;border-radius:25px;font-family:'Courier New',monospace;font-size:0.8em;letter-spacing:1px;animation:toastIn 0.3s ease,toastOut 0.3s ease 1.8s forwards;text-align:center;pointer-events:auto}
+        .toast-success{background:#0a2a0a;color:var(--green);border:1px solid var(--green)}
+        .toast-error{background:#2a0a0a;color:var(--red);border:1px solid var(--red)}
+        .toast-info{background:#0a0a2a;color:var(--blue);border:1px solid var(--blue)}
+        .toast-warning{background:#2a1a00;color:#ffaa00;border:1px solid #ffaa00}
+        .toast-purple{background:#1a0a2a;color:#bb88ff;border:1px solid #bb88ff}
+        .toast-yellow{background:#2a2000;color:#ffaa00;border:1px solid #ffaa00}
+        .toast-pink{background:#2a0030;color:#ff66aa;border:1px solid #ff66aa}
+        .toast-cyan{background:#002a2a;color:var(--cyan);border:1px solid var(--cyan)}
+        @keyframes toastIn{from{transform:translateY(-50px);opacity:0}to{transform:translateY(0);opacity:1}}
+        @keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateY(-30px)}}
+        .no-accounts{text-align:center;padding:60px 20px;color:#444;font-size:1em;letter-spacing:2px}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0a0a0a}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+        @media(max-width:600px){.header h1{font-size:1.4em}.card-row{flex-direction:column;gap:3px}.card-value{text-align:left}.card-label{min-width:auto}.action-buttons{flex-direction:column;align-items:center}.btn-action{width:90%}.btn-generate{padding:14px 30px;font-size:0.9em}.saved-account-item{flex-direction:column;align-items:flex-start}}
+    </style>
+</head>
+<body class="protected" oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;" oncopy="return false;" oncut="return false;">
+<canvas id="particles-canvas"></canvas>
+<div class="toast-container" id="toastContainer"></div>
+<div class="gear-icon" id="gearIcon" title="Admin Panel">⚙️</div>
+
+<div class="locked-overlay" id="lockedOverlay">
+    <div class="locked-box">
+        <span class="lock-icon">🔐</span>
+        <h2 id="lockedTitle">ACCESS REQUIRED</h2>
+        <p id="lockedSubtitle">Login or create an account to use the CODM Account Generator by sunnelxy.</p>
+        <input type="text" id="lockedUsername" placeholder="Username" autocomplete="off">
+        <input type="password" id="lockedPassword" placeholder="Password" autocomplete="off">
+        <div class="locked-error" id="lockedError"></div>
+        <button id="lockedSubmitBtn" onclick="lockedSubmit()">LOGIN</button>
+        <div class="switch-text" onclick="toggleLockedMode()">Don't have an account? <span>SIGN UP</span></div>
+    </div>
+</div>
+
+<div class="main-container" id="mainContent" style="display:none;">
+    <div class="header"><h1>CODM ACCOUNT GENERATOR</h1><div class="subtitle">by sunnelxy</div><div class="powered-by-header">✦ Powered by: @sunnelxy ✦</div></div>
+    <div class="user-bar"><span class="user-info" id="userInfo">👤 </span><button class="btn-logout-small" id="btnLogoutSmall" onclick="logout()" style="display:inline-block;">🚪 LOGOUT</button></div>
+    <div class="announcement-bar" id="announcementBar">
+        <button class="announce-close" onclick="dismissAnnouncement()">✕</button>
+        <span class="announce-icon">📢</span>
+        <span class="announce-title" id="announceTitle">WELCOME</span>
+        <span class="announce-text" id="announceText">Welcome! 15 high-level CODM accounts available.</span>
+    </div>
+    <div class="admin-panel" id="adminPanel">
+        <h3>🛡️ ADMIN PANEL — sunnelxy</h3>
+        <label>📋 Paste Full Account Block Below</label>
+        <textarea id="adminBulkInput" placeholder="Paste account block(s) here..."></textarea>
+        <div class="admin-hint">Auto-strips foreign branding. Auto-announces to all users.</div>
+        <div class="admin-btn-row">
+            <button class="btn-admin btn-admin-add" onclick="adminBulkAdd()">➕ Parse & Add</button>
+            <button class="btn-admin btn-admin-rebrand" onclick="adminRebrandAll()">🔄 Rebrand All</button>
+            <button class="btn-admin btn-admin-view" onclick="adminViewAll()">📋 View All</button>
+            <button class="btn-admin btn-admin-view" onclick="adminViewUsers()">👥 View Users</button>
+            <button class="btn-admin btn-admin-clear" onclick="adminClearLog()">🗑️ Clear Log</button>
+            <button class="btn-admin btn-admin-logout" onclick="adminLogout()">🚪 Close</button>
+        </div>
+        <div class="admin-announce-section">
+            <label>📢 ANNOUNCEMENT</label>
+            <input type="text" id="announceTitleInput" placeholder="Title" maxlength="30">
+            <textarea id="announceTextInput" placeholder="Message..." maxlength="200"></textarea>
+            <button class="btn-announce-save" onclick="saveAnnouncement()">💾 Save</button>
+            <button class="btn-announce-clear" onclick="clearAnnouncement()">🗑️ Clear</button>
+        </div>
+        <div id="adminTableContainer" style="margin-top:15px;"></div>
+    </div>
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('generator')">⚡ GENERATOR</button>
+        <button class="tab-btn saved-tab" onclick="switchTab('saved')">💾 MY SAVED (<span id="savedCountNav">0</span>)</button>
+    </div>
+    <div class="tab-content active" id="tab-generator">
+        <div class="generate-section"><button class="btn-generate" onclick="generateAccount()">⚡ GENERATE ACCOUNT</button><div class="account-counter">Account <span id="currentIndex">0</span> of <span id="totalAccounts">15</span></div></div>
+        <div class="card-container"><div class="card-flipper" id="cardFlipper"><div class="account-card" id="accountCard"><div id="cardContent"><div style="text-align:center;color:#444;padding:40px;">⚡<br>Click "GENERATE ACCOUNT"<br>to start</div></div><div class="powered-by">✦ Powered by: @sunnelxy ✦</div></div></div></div>
+        <div class="action-buttons" id="actionButtons" style="display:none;">
+            <button class="btn-action btn-copy" onclick="copyLogin()">📋 COPY LOGIN</button>
+            <button class="btn-action btn-auto-copy-user" onclick="autoCopyUsername()">👤 COPY USERNAME</button>
+            <button class="btn-action btn-auto-copy-email" onclick="autoCopyEmail()">📧 COPY EMAIL</button>
+            <button class="btn-action btn-auto-copy-pass" onclick="autoCopyPassword()">🔑 COPY PASSWORD</button>
+            <button class="btn-action btn-working" onclick="markWorking()">✅ WORKING (SAVE & REMOVE)</button>
+            <button class="btn-action btn-not-working" onclick="markNotWorking()">❌ NOT WORKING (REMOVE)</button>
+        </div>
+        <div class="verify-section" id="verifySection" style="display:none;"><p>⚠️ Leave feedback:</p><div class="verify-input-row"><input type="text" class="verify-input" id="questionInput" placeholder="Type your feedback..."><button class="btn-submit-question" onclick="submitQuestion()">📨 Submit</button></div></div>
+        <div class="no-accounts" id="noAccountsMsg" style="display:none;">⚠️<br>No accounts remaining.</div>
+    </div>
+    <div class="tab-content saved-content" id="tab-saved">
+        <div class="saved-stats"><div class="saved-stat-card"><div class="stat-num" id="savedTotal">0</div><div class="stat-label">TOTAL SAVED</div></div><div class="saved-stat-card"><div class="stat-num" id="savedToday">0</div><div class="stat-label">SAVED TODAY</div></div></div>
+        <div class="saved-accounts-list" id="savedAccountsList"></div>
+        <button class="btn-export-all" onclick="exportSavedAccounts()" id="btnExportAll" style="display:none;">📤 EXPORT MY SAVED</button>
+    </div>
+    <div class="log-panel" id="logPanel"><h3>📜 ACTIVITY LOG</h3><div id="logEntries"><div class="log-entry"><span class="log-time">[SYSTEM]</span> <span class="log-action">Generator initialized — @sunnelxy | 15 accounts ready</span></div></div></div>
+</div>
+
+<script>
+(function(){
+    document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&[73,74,85,83].includes(e.keyCode))){e.preventDefault();return false;}});
+    setInterval(function(){const w=window.outerWidth-window.innerWidth;if(w>180){document.body.innerHTML='<div style="color:#f00;text-align:center;padding:100px;background:#000;height:100vh;font-family:monospace"><h1>🔒 SOURCE PROTECTED</h1><p>sunnelxy</p></div>';}},500);
+    console.clear();['log','warn','error','info','debug'].forEach(m=>{console[m]=function(){}});
+})();
+
+const BRAND='@sunnelxy',BRAND_FULL='✦ Powered by: @sunnelxy ✦';
+let accountDatabase=[],savedAccounts=[],currentAccountIndex=-1,adminLoggedIn=false,userToken=null,currentUser=null,lockedMode='login';
+let announcementData={title:'WELCOME',text:'Welcome! 15 high-level CODM accounts available.',visible:true,custom:true,autoText:''};
+
+async function api(url,options={}){const headers={'Content-Type':'application/json'};if(userToken)headers['x-auth-token']=userToken;try{const res=await fetch(url,{...options,headers:{...headers,...(options.headers||{})}});if(res.status===401){logout();throw new Error('Session');}const data=await res.json();if(!res.ok)throw new Error(data.error||'Failed');return data;}catch(e){console.error(e);throw e;}}
+
+function showLockedOverlay(){document.getElementById('lockedOverlay').classList.remove('hidden');document.getElementById('mainContent').style.display='none';}
+function hideLockedOverlay(){document.getElementById('lockedOverlay').classList.add('hidden');document.getElementById('mainContent').style.display='block';}
+function toggleLockedMode(){lockedMode=lockedMode==='login'?'signup':'login';document.getElementById('lockedTitle').textContent=lockedMode==='login'?'ACCESS REQUIRED':'CREATE ACCOUNT';document.getElementById('lockedSubtitle').textContent=lockedMode==='login'?'Login to use the CODM Account Generator by sunnelxy.':'Create a free account to access the generator.';document.getElementById('lockedSubmitBtn').textContent=lockedMode==='login'?'LOGIN':'SIGN UP';document.querySelector('#lockedOverlay .switch-text').innerHTML=lockedMode==='login'?'Don\'t have an account? <span>SIGN UP</span>':'Already have an account? <span>LOGIN</span>';document.getElementById('lockedError').style.display='none';document.getElementById('lockedUsername').value='';document.getElementById('lockedPassword').value='';}
+async function lockedSubmit(){const u=document.getElementById('lockedUsername').value.trim(),p=document.getElementById('lockedPassword').value.trim(),errEl=document.getElementById('lockedError');if(!u||!p){errEl.textContent='All fields required';errEl.style.display='block';return;}if(u.length<3){errEl.textContent='Username min 3 chars';errEl.style.display='block';return;}if(p.length<4){errEl.textContent='Password min 4 chars';errEl.style.display='block';return;}try{const ep=lockedMode==='login'?'/api/login':'/api/signup';const res=await fetch(ep,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});const data=await res.json();if(!res.ok){errEl.textContent=data.error;errEl.style.display='block';return;}userToken=data.token;currentUser=data.username;localStorage.setItem('sunnelxy_token',userToken);localStorage.setItem('sunnelxy_user',currentUser);hideLockedOverlay();updateUserUI();await loadUserSaved();if(data.isNew){showToast('🎉 Welcome, '+currentUser+'!','success');}else{showToast('✅ Welcome back, '+currentUser+'!','success');}addLog('🔑 Logged in: '+currentUser,'');}catch(e){errEl.textContent='Connection error';errEl.style.display='block';}}
+
+async function logout(){if(userToken)try{await api('/api/logout',{method:'POST'});}catch(e){}userToken=null;currentUser=null;localStorage.removeItem('sunnelxy_token');localStorage.removeItem('sunnelxy_user');savedAccounts=[];updateUserUI();updateSavedStats();renderSavedAccounts();addLog('🔑 Logged out','');showToast('👋 Logged out','info');showLockedOverlay();}
+function updateUserUI(){if(currentUser){document.getElementById('userInfo').textContent='👤 '+currentUser;document.getElementById('btnLogoutSmall').style.display='inline-block';}else{document.getElementById('userInfo').textContent='';document.getElementById('btnLogoutSmall').style.display='none';}}
+async function loadUserSaved(){if(!userToken){savedAccounts=[];updateSavedStats();renderSavedAccounts();return;}try{const data=await api('/api/user/saved');savedAccounts=data;updateSavedStats();renderSavedAccounts();}catch(e){savedAccounts=[];}}
+async function saveState(){if(adminLoggedIn)try{await fetch('/api/admin/accounts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:'sunneladmin2026',accounts:accountDatabase})});}catch(e){}localStorage.setItem('codm_admin_logged',adminLoggedIn);try{await fetch('/api/admin/announcement',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:'sunneladmin2026',announcement:announcementData})});}catch(e){}}
+async function loadState(){try{const res=await fetch('/api/accounts');accountDatabase=await res.json();accountDatabase=accountDatabase.map(a=>{if(a.account&&a.account.includes('✦ Powered by:'))a.account=a.account.replace(/✦\s*Powered by:\s*@?\S+\s*✦/gi,'').trim();return a;});}catch(e){}try{const ares=await fetch('/api/announcement');const ad=await ares.json();if(ad)announcementData=ad;}catch(e){}const tok=localStorage.getItem('sunnelxy_token'),usr=localStorage.getItem('sunnelxy_user');if(tok&&usr){userToken=tok;currentUser=usr;updateUserUI();hideLockedOverlay();await loadUserSaved();}else{showLockedOverlay();}if(localStorage.getItem('codm_admin_logged')==='true'){adminLoggedIn=true;document.getElementById('adminPanel').classList.add('active');}applyAnnouncement();updateCounter();updateSavedStats();renderSavedAccounts();}
+function applyAnnouncement(){const bar=document.getElementById('announcementBar'),tEl=document.getElementById('announceTitle'),txEl=document.getElementById('announceText');if(announcementData.visible&&(announcementData.text||announcementData.autoText)){bar.classList.remove('hidden');tEl.textContent=announcementData.title||'UPDATE';txEl.textContent=announcementData.custom?announcementData.text:announcementData.autoText;}else{bar.classList.add('hidden');}if(adminLoggedIn){document.getElementById('announceTitleInput').value=announcementData.custom?announcementData.title:'';document.getElementById('announceTextInput').value=announcementData.custom?announcementData.text:'';}}
+function flashAnnouncement(){const bar=document.getElementById('announcementBar');bar.classList.add('announce-flash');setTimeout(()=>bar.classList.remove('announce-flash'),2000);}
+function autoAnnounce(count){announcementData.title='🆕 '+count+' NEW ADDED!';announcementData.autoText=count+' fresh account(s) just dropped! Total: '+accountDatabase.length+' available.';announcementData.text='';announcementData.visible=true;announcementData.custom=false;applyAnnouncement();flashAnnouncement();saveState();addLog('📢 Auto-announce: '+count+' new','announce');}
+function dismissAnnouncement(){announcementData.visible=false;document.getElementById('announcementBar').classList.add('hidden');saveState();addLog('📢 Dismissed','announce');}
+function saveAnnouncement(){const t=document.getElementById('announceTitleInput').value.trim()||'UPDATE',tx=document.getElementById('announceTextInput').value.trim();if(!tx){showToast('❌ Text empty!','error');return;}announcementData.title=t;announcementData.text=tx;announcementData.visible=true;announcementData.custom=true;announcementData.autoText='';applyAnnouncement();flashAnnouncement();saveState();addLog('📢 Custom: '+t,'announce');showToast('📢 Saved!','pink');}
+function clearAnnouncement(){announcementData.title='UPDATE';announcementData.text='';announcementData.autoText='';announcementData.visible=false;announcementData.custom=false;applyAnnouncement();saveState();document.getElementById('announceTitleInput').value='';document.getElementById('announceTextInput').value='';addLog('📢 Cleared','announce');showToast('🗑️ Auto-announce enabled','info');}
+
+const canvas=document.getElementById('particles-canvas'),C=canvas.getContext('2d');let particles=[];
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+window.addEventListener('resize',resizeCanvas);resizeCanvas();
+class Particle{constructor(){this.reset();this.y=Math.random()*canvas.height;}reset(){this.x=Math.random()*canvas.width;this.y=-10;this.size=Math.random()*3+1;this.speedY=Math.random()*0.8+0.3;this.speedX=Math.random()*0.6-0.3;this.opacity=Math.random()*0.7+0.2;this.life=Math.random()*250+150;this.age=0;this.hue=Math.random()*60+10;}update(){this.y+=this.speedY;this.x+=this.speedX;this.age++;if(this.age>this.life||this.y>canvas.height+10)this.reset();}draw(){const a=this.opacity*(1-this.age/this.life);C.fillStyle='hsla('+this.hue+',100%,50%,'+a+')';C.beginPath();C.arc(this.x,this.y,this.size,0,Math.PI*2);C.fill();C.shadowBlur=10;C.shadowColor='rgba(255,69,0,'+a+')';C.fill();C.shadowBlur=0;}}
+for(let i=0;i<100;i++)particles.push(new Particle());
+function animateParticles(){C.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animateParticles);}
+animateParticles();
+
+function showToast(m,type){const c=document.getElementById('toastContainer'),t=document.createElement('div');t.className='toast toast-'+type;t.textContent=m;c.appendChild(t);setTimeout(()=>{if(t.parentNode)t.parentNode.removeChild(t);},2200);}
+function addLog(action,cls){const le=document.getElementById('logEntries'),ts=new Date().toLocaleTimeString('en-US',{hour12:false}),e=document.createElement('div');e.className='log-entry';e.innerHTML='<span class="log-time">['+ts+']</span> <span class="log-action '+(cls||'')+'">'+action+'</span>';le.prepend(e);while(le.children.length>51)le.removeChild(le.lastChild);}
+function updateCounter(){document.getElementById('totalAccounts').textContent=accountDatabase.length;if(currentAccountIndex>=accountDatabase.length)currentAccountIndex=accountDatabase.length-1;document.getElementById('currentIndex').textContent=currentAccountIndex>=0?currentAccountIndex+1:0;}
+function switchTab(tab){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));if(tab==='generator'){document.querySelector('.tab-btn:not(.saved-tab)').classList.add('active');document.getElementById('tab-generator').classList.add('active');}else{document.querySelector('.tab-btn.saved-tab').classList.add('active');document.getElementById('tab-saved').classList.add('active');renderSavedAccounts();updateSavedStats();}}
+async function saveWorkingAccount(account){if(!userToken){showToast('🔐 Login required!','warning');return false;}if(savedAccounts.find(s=>s.account===account.account)){showToast('⚠️ Already saved!','warning');return true;}try{await api('/api/user/saved',{method:'POST',body:JSON.stringify({account:account.account,username:account.username,uid:account.uid,level:account.level,ign:account.ign})});await loadUserSaved();addLog('💾 Saved: '+account.account,'saved');return true;}catch(e){showToast('❌ Save failed','error');return false;}}
+function updateSavedStats(){document.getElementById('savedTotal').textContent=savedAccounts.length;document.getElementById('savedCountNav').textContent=savedAccounts.length;document.getElementById('savedToday').textContent=savedAccounts.filter(s=>new Date(s.savedAt).toDateString()===new Date().toDateString()).length;document.getElementById('btnExportAll').style.display=savedAccounts.length>0?'block':'none';}
+function renderSavedAccounts(){const c=document.getElementById('savedAccountsList');if(!userToken){c.innerHTML='<div class="no-saved">🔐 Login to see your saved accounts.</div>';return;}if(savedAccounts.length===0){c.innerHTML='<div class="no-saved">💾 No saved accounts yet.<br>Click "✅ WORKING (SAVE & REMOVE)" to save accounts here.</div>';return;}let h='';savedAccounts.forEach((s,i)=>{h+='<div class="saved-account-item"><div class="saved-account-info"><div class="saved-acc">'+s.account+'</div><div class="saved-meta">👤 '+s.username+' | 🎮 Lv.'+(s.level||'?')+' | IGN: '+(s.ign||'?')+' | 📅 '+new Date(s.savedAt).toLocaleString()+'</div></div><div class="saved-account-actions"><button class="btn-saved btn-saved-copy" onclick="copySavedLogin('+i+')">📋</button><button class="btn-saved btn-saved-copy-user" onclick="copySavedUser('+i+')">👤</button><button class="btn-saved btn-saved-copy-pass" onclick="copySavedPass('+i+')">🔑</button><button class="btn-saved btn-saved-delete" onclick="deleteSavedAccount('+i+')">🗑️</button></div></div>';});c.innerHTML=h;}
+function copySavedLogin(i){copyToClipboard(savedAccounts[i].account);showToast('✅ Copied!','success');}
+function copySavedUser(i){copyToClipboard(savedAccounts[i].username);showToast('👤 Copied!','info');}
+function copySavedPass(i){const p=savedAccounts[i].account.split(' : ')[1];if(!p){showToast('No password!','error');return;}copyToClipboard(p);showToast('🔑 Copied!','yellow');}
+async function deleteSavedAccount(i){if(!confirm('Remove?'))return;try{await api('/api/user/saved/'+i,{method:'DELETE'});await loadUserSaved();showToast('🗑️ Removed!','error');}catch(e){}}
+function exportSavedAccounts(){let t='═══ MY SAVED ACCOUNTS ═══\nUser: '+(currentUser||'Unknown')+'\nExported: '+new Date().toLocaleString()+'\nTotal: '+savedAccounts.length+'\n'+'═'.repeat(50)+'\n\n';savedAccounts.forEach((s,i)=>{t+='═══ Account '+(i+1)+' ═══\nAccount: '+s.account+'\nUsername: '+s.username+'\n';if(s.uid)t+='UID: '+s.uid+'\n';if(s.level)t+='Level: '+s.level+'\n';if(s.ign)t+='IGN: '+s.ign+'\n';t+='Saved: '+new Date(s.savedAt).toLocaleString()+'\n'+BRAND_FULL+'\n\n';});copyToClipboard(t);showToast('📤 Exported!','cyan');}
+function adminRebrandAll(){if(!confirm('Rebrand ALL to @sunnelxy?'))return;let c=0;accountDatabase=accountDatabase.map(a=>{const o=a.account,n=o.replace(/✦\s*Powered by:\s*@?\S+\s*✦/gi,'').trim();if(o!==n)c++;return{...a,account:n};});saveState();updateCounter();addLog('🔄 Rebranded '+c,'rebrand');showToast('🔄 '+c+' rebranded!','pink');}
+function parseAccountBlock(raw){const text=raw.replace(/✦\s*Powered by:\s*@?\S+\s*✦/gi,'').trim(),extract=(rx,s,g)=>{g=g||1;const m=s.match(rx);return m?m[g].trim():'';};let as=extract(/^Account:\s*(.+)$/im,text).replace(/✦\s*Powered by:\s*@?\S+\s*✦/gi,'').trim(),ep='',pp='';if(as.includes(' : ')){const pts=as.split(' : ');ep=pts[0].trim();pp=pts.slice(1).join(' : ').trim();}return{account:as||(ep+' : '+pp),uid:extract(/^UID:\s*(\S+)$/im,text),username:extract(/^Username:\s*(.+)$/im,text),garenaShell:extract(/^Garena Shell:\s*(.+)$/im,text),email:extract(/^Email:\s*(.+)$/im,text),mobile:extract(/^Mobile:\s*(.+)$/im,text),country:extract(/^Country:\s*(.+)$/im,text),nickname:extract(/^Nickname:\s*(.*)$/im,text)||'',fbUsername:extract(/^Facebook Username:\s*(.*)$/im,text)||'',fbLink:extract(/^Facebook Link:\s*(.*)$/im,text)||'',fbStatus:extract(/^Facebook Status:\s*(.+)$/im,text),level:extract(/^Account Level:\s*(.+)$/im,text),server:extract(/^Server:\s*(.+)$/im,text),ign:extract(/^IGN:\s*(.+)$/im,text),lastLogin:extract(/^Last Login:\s*(.+)$/im,text),loginFrom:extract(/^Last Login From:\s*(.+)$/im,text),loginIP:extract(/^Last Login IP:\s*(.+)$/im,text),loginCountry:extract(/^Last Login Country:\s*(.+)$/im,text),status:extract(/^Account Status:\s*(.+)$/im,text)};}
+async function adminBulkAdd(){const raw=document.getElementById('adminBulkInput').value.trim();if(!raw){showToast('❌ Paste first!','error');return;}const blocks=raw.split(/═══\s*Account\s+\d+\s+of\s+\d+\s*═══/i).filter(b=>b.trim().length>20);let added=0;(blocks.length>0?blocks:[raw]).forEach(b=>{const a=parseAccountBlock(b);if(a.account&&a.account!==' : '&&a.account.length>3){a.account=a.account.replace(/✦\s*Powered by:\s*@?\S+\s*✦/gi,'').trim();accountDatabase.push(a);added++;}});if(added===0){showToast('❌ No valid accounts.','error');return;}saveState();updateCounter();autoAnnounce(added);addLog('🛡️ Admin added '+added,'admin');showToast('➕ '+added+' added!','success');document.getElementById('adminBulkInput').value='';document.getElementById('noAccountsMsg').style.display='none';}
+function renderCard(acc){document.getElementById('cardContent').innerHTML='<div class="card-section"><div class="card-section-title">🔑 Account Information</div><div class="card-row"><span class="card-label">Account:</span><span class="card-value highlight">'+acc.account+'</span></div><div class="card-row"><span class="card-label">UID:</span><span class="card-value">'+acc.uid+'</span></div><div class="card-row"><span class="card-label">Username:</span><span class="card-value">'+acc.username+'</span></div><div class="card-row"><span class="card-label">Garena Shell:</span><span class="card-value">'+acc.garenaShell+'</span></div><div class="card-row"><span class="card-label">Email:</span><span class="card-value">'+acc.email+'</span></div><div class="card-row"><span class="card-label">Mobile:</span><span class="card-value">'+acc.mobile+'</span></div><div class="card-row"><span class="card-label">Country:</span><span class="card-value">'+acc.country+'</span></div><div class="card-row"><span class="card-label">Nickname:</span><span class="card-value">'+(acc.nickname||'---')+'</span></div></div><div class="card-section"><div class="card-section-title">📘 Facebook Information</div><div class="card-row"><span class="card-label">FB Username:</span><span class="card-value">'+(acc.fbUsername||'N/A')+'</span></div><div class="card-row"><span class="card-label">FB Link:</span><span class="card-value" style="font-size:0.7em;">'+(acc.fbLink||'N/A')+'</span></div><div class="card-row"><span class="card-label">FB Status:</span><span class="card-value">'+acc.fbStatus+'</span></div></div><div class="card-section"><div class="card-section-title">🎮 CODM Information</div><div class="card-row"><span class="card-label">Account Level:</span><span class="card-value">'+acc.level+'</span></div><div class="card-row"><span class="card-label">Server:</span><span class="card-value">'+acc.server+'</span></div><div class="card-row"><span class="card-label">IGN:</span><span class="card-value">'+acc.ign+'</span></div></div><div class="card-section"><div class="card-section-title">📅 Login History</div><div class="card-row"><span class="card-label">Last Login:</span><span class="card-value">'+acc.lastLogin+'</span></div><div class="card-row"><span class="card-label">Login From:</span><span class="card-value">'+acc.loginFrom+'</span></div><div class="card-row"><span class="card-label">Login IP:</span><span class="card-value">'+acc.loginIP+'</span></div><div class="card-row"><span class="card-label">Login Country:</span><span class="card-value">'+acc.loginCountry+'</span></div></div><div style="text-align:center;margin-top:12px;"><span class="status-badge status-not-clean">'+acc.status+'</span></div>';}
+function generateAccount(){if(accountDatabase.length===0){document.getElementById('noAccountsMsg').style.display='block';document.getElementById('actionButtons').style.display='none';document.getElementById('verifySection').style.display='none';document.getElementById('cardContent').innerHTML='<div style="text-align:center;color:#444;padding:40px;">⚠️<br>No accounts in database</div>';showToast('No accounts!','warning');return;}document.getElementById('noAccountsMsg').style.display='none';document.getElementById('actionButtons').style.display='flex';document.getElementById('verifySection').style.display='block';const flipper=document.getElementById('cardFlipper');flipper.classList.add('flipping');setTimeout(()=>flipper.classList.remove('flipping'),600);currentAccountIndex=Math.floor(Math.random()*accountDatabase.length);renderCard(accountDatabase[currentAccountIndex]);updateCounter();addLog('Generated: '+accountDatabase[currentAccountIndex].account,'');showToast('⚡ Generated!','success');}
+function copyToClipboard(text){if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).catch(()=>fallbackCopy(text));else fallbackCopy(text);}
+function fallbackCopy(text){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){showToast('Copy failed!','error');}document.body.removeChild(ta);}
+function copyLogin(){if(currentAccountIndex<0||currentAccountIndex>=accountDatabase.length){showToast('Generate first!','error');return;}copyToClipboard(accountDatabase[currentAccountIndex].account);showToast('✅ Copied!','success');}
+function autoCopyUsername(){if(currentAccountIndex<0||currentAccountIndex>=accountDatabase.length){showToast('Generate first!','error');return;}copyToClipboard(accountDatabase[currentAccountIndex].username);showToast('👤 Copied!','info');}
+function autoCopyEmail(){if(currentAccountIndex<0||currentAccountIndex>=accountDatabase.length){showToast('Generate first!','error');return;}copyToClipboard(accountDatabase[currentAccountIndex].account.split(' : ')[0]);showToast('📧 Copied!','purple');}
+function autoCopyPassword(){if(currentAccountIndex<0||currentAccountIndex>=accountDatabase.length){showToast('Generate first!','error');return;}const p=accountDatabase[currentAccountIndex].account.split(' : ')[1];if(!p){showToast('No password!','error');return;}copyToClipboard(p);showToast('🔑 Copied!','yellow');}
+async function markWorking(){if(currentAccountIndex<0||currentAccountIndex>=accountDatabase.length){showToast('Generate first!','error');return;}const acc=accountDatabase[currentAccountIndex];const saved=await saveWorkingAccount(acc);accountDatabase.splice(currentAccountIndex,1);saveState();updateCounter();if(saved)showToast('💾 Saved & removed!','cyan');else showToast('🗑️ Removed from pool','error');if(accountDatabase.length===0){document.getElementById('noAccountsMsg').style.display='block';document.getElementById('actionButtons').style.display='none';document.getElementById('verifySection').style.display='none';document.getElementById('cardContent').innerHTML='<div style="text-align:center;color:#444;padding:40px;">⚠️<br>No accounts remaining</div>';currentAccountIndex=-1;updateCounter();return;}setTimeout(()=>generateAccount(),400);}
+function markNotWorking(){if(currentAccountIndex<0||currentAccountIndex>=accountDatabase.length){showToast('Generate first!','error');return;}const acc=accountDatabase[currentAccountIndex];addLog('Removed: '+acc.account,'not-working');accountDatabase.splice(currentAccountIndex,1);saveState();updateCounter();showToast('🗑️ Removed!','error');if(accountDatabase.length===0){document.getElementById('noAccountsMsg').style.display='block';document.getElementById('actionButtons').style.display='none';document.getElementById('verifySection').style.display='none';document.getElementById('cardContent').innerHTML='<div style="text-align:center;color:#444;padding:40px;">⚠️<br>No accounts remaining</div>';currentAccountIndex=-1;updateCounter();return;}setTimeout(()=>generateAccount(),400);}
+function submitQuestion(){const q=document.getElementById('questionInput').value.trim();if(!q){showToast('Type feedback!','warning');return;}addLog('Feedback: '+q,'');document.getElementById('questionInput').value='';showToast('📨 Submitted!','info');}
+async function adminViewUsers(){const c=document.getElementById('adminTableContainer');try{const res=await fetch('/api/admin/users?password=sunneladmin2026');const users=await res.json();if(users.length===0){c.innerHTML='<p style="color:#666;text-align:center;">No users.</p>';return;}let h='<div style="max-height:300px;overflow-y:auto;"><table class="admin-accounts-table"><thead><tr><th>#</th><th>Username</th><th>Activated</th><th>Saved</th><th>Created</th></tr></thead><tbody>';users.forEach((u,i)=>{h+=`<tr><td>${i+1}</td><td>${u.username}</td><td>${u.activated?'✅':'❌'}</td><td>${u.savedCount}</td><td>${new Date(u.createdAt).toLocaleDateString()}</td></tr>`;});h+='</tbody></table></div>';c.innerHTML=h;}catch(e){c.innerHTML='<p style="color:#f00;">Failed to load users.</p>';}}
+document.getElementById('gearIcon').addEventListener('click',()=>{if(adminLoggedIn){adminLogout();return;}const pw=prompt('🔐 Admin password:');if(pw==='sunneladmin2026'){adminLoggedIn=true;document.getElementById('adminPanel').classList.add('active');document.getElementById('announceTitleInput').value=announcementData.custom?announcementData.title:'';document.getElementById('announceTextInput').value=announcementData.custom?announcementData.text:'';saveState();addLog('🛡️ Admin logged in','admin');showToast('🛡️ Access granted!','success');}else if(pw!==null)showToast('❌ Wrong password!','error');});
+function adminLogout(){adminLoggedIn=false;document.getElementById('adminPanel').classList.remove('active');document.getElementById('adminTableContainer').innerHTML='';saveState();addLog('🛡️ Panel closed','admin');showToast('🚪 Closed!','info');}
+function adminViewAll(){const c=document.getElementById('adminTableContainer');if(accountDatabase.length===0){c.innerHTML='<p style="color:#666;text-align:center;">No accounts.</p>';return;}let h='<div style="max-height:300px;overflow-y:auto;"><table class="admin-accounts-table"><thead><tr><th>#</th><th>Account</th><th>Username</th><th>Level</th><th>IGN</th><th>Status</th><th>Action</th></tr></thead><tbody>';accountDatabase.forEach((a,i)=>{h+='<tr><td>'+(i+1)+'</td><td style="font-size:0.65em;">'+a.account+'</td><td>'+a.username+'</td><td>'+a.level+'</td><td>'+a.ign+'</td><td>'+a.status+'</td><td><button class="btn-delete-row" onclick="adminDeleteAccount('+i+')">🗑️</button></td></tr>';});h+='</tbody></table></div>';c.innerHTML=h;}
+function adminDeleteAccount(i){if(!confirm('Delete: '+accountDatabase[i].account+'?'))return;accountDatabase.splice(i,1);saveState();updateCounter();if(currentAccountIndex===i)currentAccountIndex=-1;if(currentAccountIndex>=accountDatabase.length)currentAccountIndex=accountDatabase.length-1;addLog('🛡️ Deleted','admin');adminViewAll();showToast('🗑️ Deleted!','error');if(accountDatabase.length===0){document.getElementById('noAccountsMsg').style.display='block';document.getElementById('actionButtons').style.display='none';document.getElementById('verifySection').style.display='none';}}
+function adminClearLog(){if(confirm('Clear all logs?')){document.getElementById('logEntries').innerHTML='';addLog('🛡️ Log cleared','admin');showToast('🗑️ Cleared!','info');}}
+document.getElementById('lockedOverlay').addEventListener('click',function(e){if(e.target===this){}});
+function init(){loadState();updateCounter();document.getElementById('totalAccounts').textContent=accountDatabase.length;document.getElementById('currentIndex').textContent='0';if(accountDatabase.length===0)document.getElementById('noAccountsMsg').style.display='block';updateSavedStats();renderSavedAccounts();}
+init();
+</script>
+</body>
+</html>
